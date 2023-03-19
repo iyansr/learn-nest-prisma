@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
@@ -24,8 +32,8 @@ export class ArticlesController {
   @Get(':id')
   @ApiOkResponse({ type: ArticleEntity })
   @ApiResponse({ status: 404 })
-  findOne(@Param('id') id: string) {
-    return this.articlesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.articlesService.findOne(id);
   }
 
   @Post()
@@ -36,13 +44,13 @@ export class ArticlesController {
 
   @Post(':id')
   @ApiOkResponse({ type: ArticleEntity })
-  update(@Param('id') id: string, @Body() dto: UpdateArticleDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateArticleDto) {
     return this.articlesService.update(+id, dto);
   }
 
   @Delete()
   @ApiOkResponse({ type: ArticleEntity })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.articlesService.remove(+id);
   }
 }
